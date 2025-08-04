@@ -16,38 +16,59 @@ export default function Home() {
   const [animSpd, setAnimSpd] = useState(1);
 
   const codeSnippets = {
-    c: ``,
-    js: `function bubbleSort(arr) {
-  let n = arr.length;
-  for (let i = 0; i < n - 1; i++) {
-    let swapped = false;
-    for (let j = 0; j < n - 1 - i; j++) {
-      if (arr[j] > arr[j + 1]) {
-        // swap
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        swapped = true;
-      }
+    c: `void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
     }
-    if (!swapped) break;
+}`,
+    js: `function insertionSort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let key = arr[i];
+    let j = i - 1;
+    while (j >= 0 && arr[j] > key) {
+      arr[j + 1] = arr[j];
+      j--;
+    }
+    arr[j + 1] = key;
   }
   return arr;
-}
-`,
-    py: `def greet(name):
-    return "Hello, " + name`,
-    cpp: `std::string greet(std::string name) {
-    return "Hello, " + name;
 }`,
-    idea: `# first loop with i as element
-    # second loop with j as element
-        if j>i:
-            swap their postions
-            
-or
+    py: `def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr`,
+    cpp: `void insertionSort(std::vector<int>& arr) {
+    for (int i = 1; i < arr.size(); i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}`,
+    idea: `# Start from the second element (index 1)
+# Compare it to the elements before it
+# Shift larger elements to the right
+# Insert the current element into its correct position
 
-Repeat n times:
-    Compare each pair of adjacent items
-    Swap them if they are in the wrong order`,
+Repeat for each element from 1 to n-1:
+    Pick current element
+    Compare with elements to its left
+    Shift left elements that are greater
+    Place current element in correct position`,
   };
 
   const updateForm = (n, key, value) => {
@@ -103,7 +124,7 @@ Repeat n times:
         <div className="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8">
           <div className="text-center mb-6">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2">
-              Bubble Sort
+              Insertion Sort
             </h1>
             <div className="inline-flex items-center space-x-4 text-sm bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-full px-4 py-2 mt-3 border border-green-400/30">
               <span className="flex items-center">
@@ -132,19 +153,20 @@ Repeat n times:
           </h2>
           <div className="space-y-4 text-gray-300 leading-relaxed">
             <p className="text-lg">
-              This sorting algorithm compares the adjacent elements and sorts
-              them if they are in the wrong order. It repeats this process{" "}
-              <span className="text-orange-400 font-semibold">n²</span> times
-              for the array to be sorted.
+              This sorting algorithm builds the sorted array one element at a
+              time by repeatedly taking the next element and inserting it into
+              its correct position within the sorted part. It may perform up to{" "}
+              <span className="text-orange-400 font-semibold">n²</span>{" "}
+              comparisons in the worst case when the array is sorted in reverse
+              order.
             </p>
             <p className="text-lg">
               It&apos;s called{" "}
               <span className="text-purple-400 font-semibold">
-                &quot;bubble&quot;
+                &quot;insertion&quot;
               </span>{" "}
-              sort because smaller elements slowly &quot;bubble up&quot; to the
-              top (beginning) of the array with each pass, like bubbles rising
-              in water.
+              sort because we are inserting an element to its correct position
+              in the sorted part of the array during every iteration.
             </p>
           </div>
         </div>
@@ -175,15 +197,15 @@ Repeat n times:
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-6">
               <p className="text-gray-300 text-lg leading-relaxed">
-                If you take a broader look, it is like taking the biggest
-                element and placing it at the end of the array, then repeating
-                this process until the array is sorted. Bubble Sort is a{" "}
+                Insertion Sort is similiar to arranging playing cards — you pick
+                each element and insert it into its correct position within the
+                sorted portion of the array. It’s a{" "}
                 <span className="text-green-400 font-semibold">
                   stable sort
                 </span>
-                , meaning that elements with equal values maintain their
-                relative order after sorting — important for multi-level sorting
-                (like sorting by grade, then by name).
+                , which means equal elements retain their original order. It is
+                useful when doing multi-level sorts like by date and then by
+                name.
               </p>
             </div>
           </div>
@@ -193,12 +215,12 @@ Repeat n times:
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-6">
             <h3 className="text-xl font-semibold text-yellow-300 mb-4 flex items-center">
-              🧪 <span className="ml-2">Stress Test</span>
+              🧪 <span className="ml-2">🧠 Benchmark Favorite</span>
             </h3>
             <p className="text-gray-300 leading-relaxed">
-              Bubble Sort is sometimes used in embedded or very low-level
-              testing as a &quot;canary&quot; algorithm to validate a basic
-              sorting function.
+              Insertion Sort is often used in performance benchmarks or compiler
+              tests due to its simplicity and predictable behavior — especially
+              on nearly sorted data, where it performs exceptionally well.
             </p>
           </div>
 
@@ -207,11 +229,15 @@ Repeat n times:
               🧙‍♂️ <span className="ml-2">Variants in Practice</span>
             </h3>
             <p className="text-gray-300 leading-relaxed">
-              Bubble Sort is too slow for large datasets. But variants like{" "}
+              Insertion Sort works well on small or nearly sorted arrays, but
+              its <span className="text-orange-400 font-semibold">O(n²)</span>{" "}
+              time complexity limits its use on larger datasets. Variants like{" "}
               <span className="text-cyan-400 font-semibold">
-                Cocktail Shaker Sort
-              </span>
-              (a bidirectional version) are more efficient in some situations.
+                Binary Insertion Sort
+              </span>{" "}
+              reduce comparisons using binary search, while{" "}
+              <span className="text-cyan-400 font-semibold">Shell Sort</span>{" "}
+              improves efficiency by allowing early long-range swaps.
             </p>
           </div>
         </div>
